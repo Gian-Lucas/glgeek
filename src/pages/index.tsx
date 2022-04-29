@@ -1,10 +1,4 @@
 import {
-  AlertDialog,
-  AlertDialogBody,
-  AlertDialogContent,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogOverlay,
   Avatar,
   Button,
   Flex,
@@ -12,8 +6,9 @@ import {
   Text,
   useDisclosure,
 } from "@chakra-ui/react";
-import { useSession, signIn, signOut } from "next-auth/client";
+import { useSession, signIn } from "next-auth/client";
 import { useEffect, useRef } from "react";
+import { LogoutAlert } from "../components/LogoutAlert";
 
 export default function Component() {
   const [session] = useSession();
@@ -53,38 +48,7 @@ export default function Component() {
         )}
       </Flex>
 
-      <AlertDialog
-        isOpen={isOpen}
-        leastDestructiveRef={cancelRef}
-        onClose={onClose}
-      >
-        <AlertDialogOverlay>
-          <AlertDialogContent>
-            <AlertDialogHeader fontSize="lg" fontWeight="bold">
-              Sair
-            </AlertDialogHeader>
-
-            <AlertDialogBody>Você deseja fazer logout?</AlertDialogBody>
-
-            <AlertDialogFooter>
-              <Button ref={cancelRef} onClick={onClose}>
-                Cancelar
-              </Button>
-              <Button
-                color="white"
-                bg="purple.500"
-                _hover={{
-                  bg: "purple.600",
-                }}
-                onClick={() => signOut()}
-                ml={3}
-              >
-                Sair
-              </Button>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialogOverlay>
-      </AlertDialog>
+      <LogoutAlert cancelRef={cancelRef} isOpen={isOpen} onClose={onClose} />
     </>
   );
 }
