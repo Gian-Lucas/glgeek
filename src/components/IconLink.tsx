@@ -10,7 +10,7 @@ export function IconLink({ href, icon }: IconLinkProps) {
   return (
     <ChakraLink href={href} isExternal>
       <Icon
-        boxSize="8"
+        boxSize={["6", "8"]}
         transition="0.4s"
         _hover={{
           transform: "scale(1.2)",

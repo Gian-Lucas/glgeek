@@ -55,7 +55,7 @@ export default function Home({ postsConnection }: HomeProps) {
             maxW="450"
             flexDir="column"
             bg="gray.900"
-            mx="auto"
+            mx={["10", "auto"]}
             my="10"
           >
             <Image src={post.banner.url} alt={post.title} />
@@ -69,15 +69,19 @@ export default function Home({ postsConnection }: HomeProps) {
               borderColor="gray.600"
             >
               <Link url={`/posts/${post.slug}`}>
-                <Heading fontSize="30">{post.title}</Heading>
+                <Heading fontSize={["20", "30"]}>{post.title}</Heading>
               </Link>
-              <Text color="gray.400" my="5">
+              <Text color="gray.400" my="5" fontSize={["14", "16"]}>
                 {post.description}
               </Text>
 
               <Flex justify="space-between">
-                <Text color="gray.400">{updatedAt}</Text>
-                <Link url={`/posts/${post.slug}`}>Ler mais</Link>
+                <Text color="gray.400" fontSize={["14", "16"]}>
+                  {updatedAt}
+                </Text>
+                <Link url={`/posts/${post.slug}`} fontSize={["14", "16"]}>
+                  Ler mais
+                </Link>
               </Flex>
             </Flex>
           </Flex>

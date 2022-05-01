@@ -10,9 +10,9 @@ export function Footer() {
       justify="space-between"
       align="center"
       py="7"
-      px="12"
+      px={["6", "12"]}
     >
-      <Text>
+      <Text fontSize={["14", "16"]}>
         <Text as="span" color="purple.300" fontWeight="bold" mr="2">
           GLgeek
         </Text>

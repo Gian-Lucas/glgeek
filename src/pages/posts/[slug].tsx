@@ -39,12 +39,14 @@ export default function Post({ post }: PostProps) {
       <Flex flexDir="column" maxW="1080" mx="auto">
         <Image src={post.banner.url} alt="Banner" w="100%" mx="auto" mb="10" />
         <Flex px="5" mb="20" flexDir="column">
-          <Heading fontSize="45">{post.title}</Heading>
-          <Flex mt="4">
-            <Text fontWeight="bold" mr="10">
+          <Heading fontSize={["30", "38", "45"]}>{post.title}</Heading>
+          <Flex mt="4" flexDir={["column", "row"]}>
+            <Text fontWeight="bold" mr="10" fontSize={["14", "16"]}>
               Escrito por {post.createdBy.name}
             </Text>
-            <Text color="gray.300">{post.updatedAt}</Text>
+            <Text color="gray.300" fontSize={["14", "16"]}>
+              {post.updatedAt}
+            </Text>
           </Flex>
         </Flex>
 
@@ -52,10 +54,23 @@ export default function Post({ post }: PostProps) {
           <RichText
             content={post.content[0].raw}
             renderers={{
-              h1: ({ children }) => <Heading my="5">{children}</Heading>,
-              h2: ({ children }) => <Heading my="5">{children}</Heading>,
+              h1: ({ children }) => (
+                <Heading my="5" fontSize={["25", "30", "35"]}>
+                  {children}
+                </Heading>
+              ),
+              h2: ({ children }) => (
+                <Heading my="5" fontSize={["25", "30", "35"]}>
+                  {children}
+                </Heading>
+              ),
               p: ({ children }) => (
-                <Text my="5" color="gray.200" fontSize="18" textAlign="justify">
+                <Text
+                  my="5"
+                  color="gray.200"
+                  fontSize={["16", "18"]}
+                  textAlign="justify"
+                >
                   {children}
                 </Text>
               ),

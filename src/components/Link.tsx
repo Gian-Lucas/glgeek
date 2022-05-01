@@ -1,13 +1,13 @@
-import { Link as LinkChakra } from "@chakra-ui/react";
+import { Link as LinkChakra, LinkProps } from "@chakra-ui/react";
 import LinkNext from "next/link";
 import { ReactNode } from "react";
 
-interface LinkProps {
+interface LinkPropsComponent extends LinkProps {
   url: string;
   children: ReactNode;
 }
 
-export function Link({ url, children }: LinkProps) {
+export function Link({ url, children, ...rest }: LinkPropsComponent) {
   return (
     <LinkNext href={url}>
       <LinkChakra
@@ -15,6 +15,7 @@ export function Link({ url, children }: LinkProps) {
         _hover={{
           color: "purple.400",
         }}
+        {...rest}
       >
         {children}
       </LinkChakra>
