@@ -9,10 +9,11 @@ export function Footer() {
       bg="gray.700"
       justify="space-between"
       align="center"
-      p="10"
+      py="7"
+      px="12"
     >
       <Text>
-        <Text as="span" color="purple.400" fontWeight="bold" mr="2">
+        <Text as="span" color="purple.300" fontWeight="bold" mr="2">
           GLgeek
         </Text>
         2022 Todos os direitos reservados.

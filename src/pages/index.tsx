@@ -1,4 +1,4 @@
-import { Flex, Heading, Image, Link, Text } from "@chakra-ui/react";
+import { Flex, Heading, Image, Text } from "@chakra-ui/react";
 import { gql } from "graphql-request";
 import { GetStaticProps } from "next";
 import { Header } from "../components/Header";
@@ -6,31 +6,7 @@ import { graphcms } from "../services/graphcms";
 import format from "date-fns/format";
 import ptBR from "date-fns/locale/pt-BR";
 import { Footer } from "../components/Footer";
-
-const QUERY = gql`
-  {
-    posts {
-      id
-      createdAt
-      description
-      slug
-      title
-      updatedAt
-      content {
-        html
-        raw
-      }
-      banner {
-        url
-        width
-        height
-      }
-      createdBy {
-        name
-      }
-    }
-  }
-`;
+import { Link } from "../components/Link";
 
 interface Post {
   id: string;
@@ -38,24 +14,9 @@ interface Post {
   description: string;
   slug: string;
   title: string;
-  updatedAt: string;
   banner: {
     url: string;
-    width: number;
-    height: number;
   };
-  createdBy: {
-    name: string;
-  };
-  content: Array<{
-    html: string;
-    // raw: {
-    //   children: Array<{
-    //     type: string;
-
-    //   }>
-    // }
-  }>;
 }
 
 interface HomeProps {
@@ -92,13 +53,7 @@ export default function Home({ posts }: HomeProps) {
               borderRight="1px"
               borderColor="gray.600"
             >
-              <Link
-                href="#"
-                transition="0.2s"
-                _hover={{
-                  color: "purple.500",
-                }}
-              >
+              <Link url={`/posts/${post.slug}`}>
                 <Heading fontSize="30">{post.title}</Heading>
               </Link>
               <Text color="gray.400" my="5">
@@ -107,14 +62,7 @@ export default function Home({ posts }: HomeProps) {
 
               <Flex justify="space-between">
                 <Text color="gray.400">{post.createdAt}</Text>
-                <Link
-                  href="#"
-                  _hover={{
-                    color: "purple.500",
-                  }}
-                >
-                  Ler mais
-                </Link>
+                <Link url={`/posts/${post.slug}`}>Ler mais</Link>
               </Flex>
             </Flex>
           </Flex>
@@ -125,6 +73,29 @@ export default function Home({ posts }: HomeProps) {
     </>
   );
 }
+
+const QUERY = gql`
+  {
+    posts {
+      id
+      createdAt
+      description
+      slug
+      title
+      updatedAt
+      content {
+        html
+        raw
+      }
+      banner {
+        url
+      }
+      createdBy {
+        name
+      }
+    }
+  }
+`;
 
 export const getStaticProps: GetStaticProps = async () => {
   const result = await graphcms.request<{ posts: Post[] }>(QUERY);

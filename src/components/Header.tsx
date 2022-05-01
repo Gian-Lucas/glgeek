@@ -7,6 +7,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { useSession, signIn } from "next-auth/client";
+import Link from "next/link";
 import { useRef } from "react";
 import { LogoutAlert } from "./LogoutAlert";
 
@@ -19,24 +20,46 @@ export function Header() {
   return (
     <>
       <Flex as="header" bg="gray.700" py="5" px="10" justify="space-between">
-        <Heading>
-          <Text color="purple.400" as="span">
-            GL
-          </Text>
-          geek
-        </Heading>
+        <Link href="/">
+          <Heading cursor="pointer" transition="0.3s">
+            <Text color="purple.400" as="span">
+              GL
+            </Text>
+            geek
+          </Heading>
+        </Link>
 
         {session ? (
           <Flex>
-            <Avatar
-              name={session.user.name}
-              src={session.user.image}
-              onClick={onOpen}
-              cursor="pointer"
-            />
+            <Avatar name={session.user.name} src={session.user.image} />
             <Flex flexDir="column" ml="2">
               <Text fontWeight="bold">{session.user.name}</Text>
-              <Text color="gray.400">{session.user.email}</Text>
+              <Flex>
+                <Text
+                  mr="1"
+                  color="gray.300"
+                  cursor="pointer"
+                  transition="0.2s"
+                  _hover={{
+                    color: "purple.300",
+                  }}
+                >
+                  <Link href="/favorites">Favoritos</Link>
+                </Text>
+                |
+                <Text
+                  onClick={onOpen}
+                  ml="1"
+                  color="gray.300"
+                  cursor="pointer"
+                  transition="0.2s"
+                  _hover={{
+                    color: "purple.300",
+                  }}
+                >
+                  Sair
+                </Text>
+              </Flex>
             </Flex>
           </Flex>
         ) : (
