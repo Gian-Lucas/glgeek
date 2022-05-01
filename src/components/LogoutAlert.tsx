@@ -36,7 +36,7 @@ export function LogoutAlert({ cancelRef, onClose, isOpen }: LogoutAlertProps) {
               Cancelar
             </Button>
             <Button
-              color="white"
+              color="gray.100"
               bg="purple.500"
               _hover={{
                 bg: "purple.600",

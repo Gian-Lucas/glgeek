@@ -1,4 +1,5 @@
-import { Flex, Heading, Image, Text } from "@chakra-ui/react";
+import { Box, Flex, Heading, Image, Text } from "@chakra-ui/react";
+import { RichText } from "@graphcms/rich-text-react-renderer";
 import { format } from "date-fns";
 import ptBR from "date-fns/locale/pt-BR";
 import { gql } from "graphql-request";
@@ -20,12 +21,9 @@ interface Post {
   };
   content: Array<{
     html: string;
-    // raw: {
-    //   children: Array<{
-    //     type: string;
-
-    //   }>
-    // }
+    raw: {
+      children: [];
+    };
   }>;
 }
 
@@ -34,20 +32,37 @@ interface PostProps {
 }
 
 export default function Post({ post }: PostProps) {
+  console.log(post);
   return (
     <>
       <Header />
-      <Image
-        src={post.banner.url}
-        alt="Banner"
-        w="container.lg"
-        mx="auto"
-        my="10"
-      />
-      <Flex flexDir="column">
-        <Heading>{post.title}</Heading>
-        <Text>Por {post.createdBy.name}</Text>
-        <Text>{post.updatedAt}</Text>
+      <Flex flexDir="column" maxW="1080" mx="auto">
+        <Image src={post.banner.url} alt="Banner" w="100%" mx="auto" mb="10" />
+        <Flex px="5" mb="20" flexDir="column">
+          <Heading fontSize="45">{post.title}</Heading>
+          <Flex mt="4">
+            <Text fontWeight="bold" mr="10">
+              Escrito por {post.createdBy.name}
+            </Text>
+            <Text color="gray.300">{post.updatedAt}</Text>
+          </Flex>
+        </Flex>
+
+        <Box px="5">
+          <RichText
+            content={post.content[0].raw}
+            renderers={{
+              h1: ({ children }) => <Heading my="5">{children}</Heading>,
+              h2: ({ children }) => <Heading my="5">{children}</Heading>,
+              p: ({ children }) => (
+                <Text my="5" color="gray.200" fontSize="18" textAlign="justify">
+                  {children}
+                </Text>
+              ),
+              img: ({ src, title }) => <Image src={src} alt={title} mb="16" />,
+            }}
+          />
+        </Box>
       </Flex>
       <Footer />
     </>

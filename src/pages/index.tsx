@@ -10,8 +10,8 @@ import { Link } from "../components/Link";
 
 interface Post {
   id: string;
-  createdAt: string;
   description: string;
+  updatedAt: string;
   slug: string;
   title: string;
   banner: {
@@ -19,16 +19,31 @@ interface Post {
   };
 }
 
-interface HomeProps {
-  posts: Post[];
+interface PostsConnection {
+  edges: Array<{
+    cursor: string;
+    node: Post;
+    updatedAt: string;
+  }>;
+  pageInfo: {
+    hasNextPage: boolean;
+    hasPreviousPage: boolean;
+    pageSize: number;
+  };
 }
 
-export default function Home({ posts }: HomeProps) {
-  // console.log(posts);
+interface HomeProps {
+  postsConnection: PostsConnection;
+}
+
+export default function Home({ postsConnection }: HomeProps) {
+  console.log(postsConnection);
   return (
     <>
       <Header />
-      {posts.map((post) => {
+      {postsConnection.edges.map((edge) => {
+        const post = edge.node;
+        const { updatedAt } = edge;
         return (
           <Flex
             transition="0.3s"
@@ -61,7 +76,7 @@ export default function Home({ posts }: HomeProps) {
               </Text>
 
               <Flex justify="space-between">
-                <Text color="gray.400">{post.createdAt}</Text>
+                <Text color="gray.400">{updatedAt}</Text>
                 <Link url={`/posts/${post.slug}`}>Ler mais</Link>
               </Flex>
             </Flex>
@@ -74,49 +89,55 @@ export default function Home({ posts }: HomeProps) {
   );
 }
 
-const QUERY = gql`
-  {
-    posts {
-      id
-      createdAt
-      description
-      slug
-      title
-      updatedAt
-      content {
-        html
-        raw
-      }
-      banner {
-        url
-      }
-      createdBy {
-        name
-      }
-    }
-  }
-`;
+interface GraphCMSResult {
+  postsConnection: PostsConnection;
+}
 
 export const getStaticProps: GetStaticProps = async () => {
-  const result = await graphcms.request<{ posts: Post[] }>(QUERY);
+  const QUERY = gql`
+    {
+      postsConnection {
+        edges {
+          cursor
+          node {
+            id
+            description
+            slug
+            title
+            updatedAt
+            banner {
+              url
+            }
+          }
+        }
+        pageInfo {
+          hasNextPage
+          hasPreviousPage
+          pageSize
+        }
+      }
+    }
+  `;
+  const result = await graphcms.request<GraphCMSResult>(QUERY);
 
-  // console.log(result);
-
-  const posts = result.posts.map((post) => {
+  const edges = result.postsConnection.edges.map((post) => {
     return {
       ...post,
-      createdAt: format(new Date(post.createdAt), "PP", {
-        locale: ptBR,
-      }),
-      updatedAt: format(new Date(post.createdAt), "PP", {
+      cursor: post.node.id,
+      updatedAt: format(new Date(post.node.updatedAt), "PP", {
         locale: ptBR,
       }),
     };
   });
 
+  const postsConnection = {
+    edges,
+    pageInfo: result.postsConnection.pageInfo,
+  };
+
   return {
     props: {
-      posts,
+      postsConnection,
     },
   };
 };
