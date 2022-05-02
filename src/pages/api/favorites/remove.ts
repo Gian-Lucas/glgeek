@@ -27,23 +27,34 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       );
 
       if (isInFavorites) {
+        const postsWithFavoriteRemoved = user.data.favoritePosts.filter(
+          (favorite) => {
+            if (favorite.postId !== postId) {
+              return favorite;
+            }
+          }
+        );
+
+        const removeFavorite = await fauna.query(
+          q.Update(q.Ref(q.Collection("users"), user.ref.id), {
+            data: { favoritePosts: postsWithFavoriteRemoved },
+          })
+        );
+
         return res.json({
-          message: "Post já está nos favoritos",
-          error: false,
+          message: "Post removido dos favoritos",
+          deleted: true,
         });
       }
 
-      const addFavorite = await fauna.query(
-        q.Update(q.Ref(q.Collection("users"), user.ref.id), {
-          data: { favoritePosts: [...user.data.favoritePosts, { postId }] },
-        })
-      );
-
-      return res.json({ message: "Adicionado aos favoritos", error: false });
+      return res.json({
+        message: "Post não está nos favoritos",
+        deleted: true,
+      });
     } catch (error) {
       console.log(error);
       return res.json({
-        message: "Falha ao adicionar post aos favoritos",
+        message: "Falha ao remover post dos favoritos",
         error: true,
       });
     }

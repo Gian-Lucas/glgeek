@@ -55,6 +55,19 @@ export default function Post({ post }: PostProps) {
     }
   }
 
+  async function removeFromFavorites() {
+    try {
+      const res = await api.post("/favorites/remove", {
+        postId: post.id,
+        userEmail: session.user.email,
+      });
+
+      setIsFavorite(false);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   return (
     <>
       <Header />
@@ -73,7 +86,7 @@ export default function Post({ post }: PostProps) {
 
           {isFavorite ? (
             <Icon
-              onClick={() => setIsFavorite(false)}
+              onClick={removeFromFavorites}
               transition="0.2s"
               color="purple.500"
               _hover={{
