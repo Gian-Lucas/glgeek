@@ -63,11 +63,16 @@ export function Header() {
                     size="sm"
                   />
                 </MenuButton>
-                <MenuList>
+                <MenuList bg="gray.700" border="none">
                   <NextLink href="/favorites">
-                    <MenuItem>Favoritos</MenuItem>
+                    <MenuItem _hover={{ bg: "gray.600", color: "gray.200" }}>
+                      Favoritos
+                    </MenuItem>
                   </NextLink>
-                  <MenuItem onClick={onOpen}>
+                  <MenuItem
+                    _hover={{ bg: "gray.600", color: "gray.200" }}
+                    onClick={onOpen}
+                  >
                     <Text>Sair</Text>
                   </MenuItem>
                 </MenuList>

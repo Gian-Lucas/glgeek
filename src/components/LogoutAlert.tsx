@@ -25,7 +25,7 @@ export function LogoutAlert({ cancelRef, onClose, isOpen }: LogoutAlertProps) {
       size="sm"
     >
       <AlertDialogOverlay>
-        <AlertDialogContent>
+        <AlertDialogContent bg="gray.700">
           <AlertDialogHeader fontSize="lg" fontWeight="bold">
             Sair
           </AlertDialogHeader>
@@ -33,7 +33,12 @@ export function LogoutAlert({ cancelRef, onClose, isOpen }: LogoutAlertProps) {
           <AlertDialogBody>Você deseja fazer logout?</AlertDialogBody>
 
           <AlertDialogFooter>
-            <Button ref={cancelRef} onClick={onClose}>
+            <Button
+              ref={cancelRef}
+              onClick={onClose}
+              bg="gray.600"
+              _hover={{ bg: "gray.500" }}
+            >
               Cancelar
             </Button>
             <Button

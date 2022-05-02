@@ -1,11 +1,6 @@
-import { extendTheme, ThemeConfig } from "@chakra-ui/react";
-
-const config: ThemeConfig = {
-  initialColorMode: "dark",
-};
+import { extendTheme } from "@chakra-ui/react";
 
 export const theme = extendTheme({
-  config,
   fonts: {
     heading: "Roboto",
     body: "Roboto",
@@ -14,6 +9,10 @@ export const theme = extendTheme({
     global: {
       html: {
         scrollBehavior: "smooth",
+      },
+      body: {
+        bg: "gray.800",
+        color: "gray.200",
       },
     },
   },
