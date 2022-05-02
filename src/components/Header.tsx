@@ -65,11 +65,11 @@ export function Header() {
                 </MenuButton>
                 <MenuList bg="gray.700" border="none">
                   <NextLink href="/favorites">
-                    <MenuItem _hover={{ bg: "gray.600", color: "gray.200" }}>
+                    <MenuItem _focus={{bg: "gray.700"}} _hover={{ bg: "gray.600", color: "gray.200" }}>
                       Favoritos
                     </MenuItem>
                   </NextLink>
-                  <MenuItem
+                  <MenuItem _focus={{bg: "gray.700"}}
                     _hover={{ bg: "gray.600", color: "gray.200" }}
                     onClick={onOpen}
                   >
