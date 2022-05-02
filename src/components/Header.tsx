@@ -6,11 +6,17 @@ import {
   Button,
   Text,
   useBreakpointValue,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+  Icon,
 } from "@chakra-ui/react";
 import { useSession, signIn } from "next-auth/client";
 import NextLink from "next/link";
 import { useRef } from "react";
 import { LogoutAlert } from "./LogoutAlert";
+import { FiChevronDown } from "react-icons/fi";
 
 export function Header() {
   const [session] = useSession();
@@ -18,7 +24,7 @@ export function Header() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = useRef();
 
-  const isMobile = useBreakpointValue({
+  const isDesktop = useBreakpointValue({
     sm: true,
   });
 
@@ -48,41 +54,62 @@ export function Header() {
 
         {session ? (
           <Flex>
-            <Avatar
-              name={session.user.name}
-              src={session.user.image}
-              size={isMobile ? "md" : "sm"}
-            />
-            {isMobile && (
-              <Flex flexDir="column" ml="2">
-                <Text fontWeight="bold">{session.user.name}</Text>
-                <Flex>
-                  <Text
-                    mr="1"
-                    color="gray.300"
-                    cursor="pointer"
-                    transition="0.2s"
-                    _hover={{
-                      color: "purple.300",
-                    }}
-                  >
-                    <NextLink href="/favorites">Favoritos</NextLink>
-                  </Text>
-                  |
-                  <Text
-                    onClick={onOpen}
-                    ml="1"
-                    color="gray.300"
-                    cursor="pointer"
-                    transition="0.2s"
-                    _hover={{
-                      color: "purple.300",
-                    }}
-                  >
-                    Sair
-                  </Text>
+            {!isDesktop && (
+              <Menu>
+                <MenuButton>
+                  <Avatar
+                    name={session.user.name}
+                    src={session.user.image}
+                    size="sm"
+                  />
+                </MenuButton>
+                <MenuList>
+                  <NextLink href="/favorites">
+                    <MenuItem>Favoritos</MenuItem>
+                  </NextLink>
+                  <MenuItem onClick={onOpen}>
+                    <Text>Sair</Text>
+                  </MenuItem>
+                </MenuList>
+              </Menu>
+            )}
+            {isDesktop && (
+              <>
+                <Avatar
+                  name={session.user.name}
+                  src={session.user.image}
+                  size={isDesktop ? "md" : "sm"}
+                />
+                <Flex flexDir="column" ml="2">
+                  <Text fontWeight="bold">{session.user.name}</Text>
+                  <Flex>
+                    <Text
+                      mr="1"
+                      color="gray.300"
+                      cursor="pointer"
+                      transition="0.2s"
+                      _hover={{
+                        color: "purple.300",
+                      }}
+                    >
+                      <NextLink href="/favorites">Favoritos</NextLink>
+                    </Text>
+                    |
+                    <Text
+                      onClick={onOpen}
+                      ml="1"
+                      color="gray.300"
+                      cursor="pointer"
+                      transition="0.2s"
+                      _hover={{
+                        color: "purple.300",
+                      }}
+                    >
+                      Sair
+                    </Text>
+                  </Flex>
                 </Flex>
-              </Flex>
+              </>
             )}
           </Flex>
         ) : (

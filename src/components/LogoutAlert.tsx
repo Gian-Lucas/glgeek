@@ -22,6 +22,7 @@ export function LogoutAlert({ cancelRef, onClose, isOpen }: LogoutAlertProps) {
       isOpen={isOpen}
       leastDestructiveRef={cancelRef}
       onClose={onClose}
+      size="sm"
     >
       <AlertDialogOverlay>
         <AlertDialogContent>

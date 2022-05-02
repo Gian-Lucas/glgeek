@@ -8,7 +8,7 @@ export default function Login() {
   return (
     <>
       <Header />
-      <Flex flexDir="column" maxW="1080" align="center" mt="10">
+      <Flex flexDir="column" maxW="1080" align="center" mt="10" px="10">
         <Heading>Faça seu login com a conta do Google</Heading>
 
         <Button mt="14" p="6" fontSize="18" onClick={() => signIn("google")}>

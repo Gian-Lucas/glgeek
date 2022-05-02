@@ -1,10 +1,11 @@
-import { Heading } from "@chakra-ui/react";
+import { Flex, Heading, Text } from "@chakra-ui/react";
 import { format } from "date-fns";
 import ptBR from "date-fns/locale/pt-BR";
 import { GetServerSideProps } from "next";
 import { getSession } from "next-auth/client";
 import { Footer } from "../components/Footer";
 import { Header } from "../components/Header";
+import { PostCard } from "../components/PostCard";
 import { api } from "../services/api";
 import { graphcms } from "../services/graphcms";
 
@@ -28,9 +29,27 @@ export default function Favorites({ posts }: FavoritesProps) {
   return (
     <>
       <Header />
-      <Heading>Seus posts favoritos</Heading>
-      <Footer />
-      {/* <Footer pos="fixed" bottom="0" w="full" /> */}
+      <Flex mt="10" justify="center" flexDir="column" align="center">
+        <Heading>Seus posts favoritos</Heading>
+
+        {posts.length === 0 && (
+          <Text textAlign="justify" fontSize={["18", "20"]} mt="5">
+            Você ainda não tem nenhum post marcado como favorito!
+          </Text>
+        )}
+      </Flex>
+
+      {posts.map((post) => {
+        return (
+          <PostCard key={post.id} post={post} updatedAt={post.updatedAt} />
+        );
+      })}
+
+      {posts.length === 0 ? (
+        <Footer pos="fixed" bottom="0" w="full" />
+      ) : (
+        <Footer />
+      )}
     </>
   );
 }
