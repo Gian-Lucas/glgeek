@@ -1,4 +1,6 @@
 import { Heading } from "@chakra-ui/react";
+import { format } from "date-fns";
+import ptBR from "date-fns/locale/pt-BR";
 import { GetServerSideProps } from "next";
 import { getSession } from "next-auth/client";
 import { Footer } from "../components/Footer";
@@ -70,7 +72,16 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
     }
   `;
 
-  const { posts } = await graphcms.request<{ posts: Post[] }>(QUERY);
+  const result = await graphcms.request<{ posts: Post[] }>(QUERY);
+
+  const posts = result.posts.map((post) => {
+    return {
+      ...post,
+      updatedAt: format(new Date(post.updatedAt), "PP", {
+        locale: ptBR,
+      }),
+    };
+  });
 
   return {
     props: {
