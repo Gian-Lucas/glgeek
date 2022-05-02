@@ -1,11 +1,11 @@
 import NextAuth from "next-auth";
-import GoogleProvider from "next-auth/providers/google";
+import Provider from "next-auth/providers";
 import { fauna } from "../../../services/fauna";
 import { query as q } from "faunadb";
 
 export default NextAuth({
   providers: [
-    GoogleProvider({
+    Provider.Google({
       clientId: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     }),
