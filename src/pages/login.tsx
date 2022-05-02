@@ -8,10 +8,27 @@ export default function Login() {
   return (
     <>
       <Header />
-      <Flex flexDir="column" maxW="1080" align="center" mt="10" px="10">
+      <Flex
+        flexDir="column"
+        maxW="1080"
+        align="center"
+        mt="10"
+        px="10"
+        mx="auto"
+      >
         <Heading>Faça seu login com a conta do Google</Heading>
 
-        <Button mt="14" p="6" fontSize="18" onClick={() => signIn("google")}>
+        <Button
+          mt="14"
+          p="6"
+          fontSize="18"
+          onClick={() => signIn("google")}
+          color="gray.100"
+          bg="gray.600"
+          _hover={{
+            bg: "gray.500",
+          }}
+        >
           <Icon as={AiFillGoogleCircle} boxSize={["6"]} mr="2" />
           Fazer login
         </Button>

@@ -119,6 +119,11 @@ export function Header() {
           </Flex>
         ) : (
           <Button
+            color="gray.100"
+            bg="gray.600"
+            _hover={{
+              bg: "gray.500",
+            }}
             onClick={() => signIn("google")}
             p={["3", "5"]}
             fontSize={["14", "16"]}
