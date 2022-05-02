@@ -3,7 +3,7 @@ import { RichText } from "@graphcms/rich-text-react-renderer";
 import { format } from "date-fns";
 import ptBR from "date-fns/locale/pt-BR";
 import { gql } from "graphql-request";
-import { GetStaticProps } from "next";
+import { GetServerSideProps } from "next";
 import { Footer } from "../../components/Footer";
 import { Header } from "../../components/Header";
 import { graphcms } from "../../services/graphcms";
@@ -11,7 +11,7 @@ import { RiBookmarkFill } from "react-icons/ri";
 import { RiBookmarkLine } from "react-icons/ri";
 import { useState } from "react";
 import { api } from "../../services/api";
-import { useSession } from "next-auth/client";
+import { getSession, useSession } from "next-auth/client";
 
 interface Post {
   id: string;
@@ -19,6 +19,7 @@ interface Post {
   slug: string;
   description: string;
   updatedAt: string;
+  isFavorite: boolean;
   banner: {
     url: string;
   };
@@ -39,7 +40,7 @@ interface PostProps {
 
 export default function Post({ post }: PostProps) {
   const [session] = useSession();
-  const [isFavorite, setIsFavorite] = useState(false);
+  const [isFavorite, setIsFavorite] = useState(post.isFavorite);
 
   async function addToFavorites() {
     try {
@@ -140,14 +141,21 @@ export default function Post({ post }: PostProps) {
   );
 }
 
-export async function getStaticPaths() {
-  return {
-    paths: [],
-    fallback: "blocking",
-  };
-}
+export const getServerSideProps: GetServerSideProps = async ({
+  params,
+  req,
+}) => {
+  const session = await getSession({ req });
 
-export const getStaticProps: GetStaticProps = async ({ params }) => {
+  if (!session) {
+    return {
+      redirect: {
+        destination: "/login",
+        permanent: false,
+      },
+    };
+  }
+
   const result = await graphcms.request<{ post: Post }>(gql`
       {
         post(where: { slug: "${params.slug}" }) {  
@@ -171,11 +179,17 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       }
     `);
 
+  const res = await api.post("/favorites/favorited", {
+    postId: result.post.id,
+    userEmail: session.user.email,
+  });
+
   const post = {
     ...result.post,
     updatedAt: format(new Date(result.post.updatedAt), "PPPp", {
       locale: ptBR,
     }),
+    isFavorite: res.data.isInFavorites,
   };
 
   return {

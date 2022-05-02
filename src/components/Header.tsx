@@ -86,7 +86,13 @@ export function Header() {
             )}
           </Flex>
         ) : (
-          <Button onClick={() => signIn("google")}>Entrar</Button>
+          <Button
+            onClick={() => signIn("google")}
+            p={["3", "5"]}
+            fontSize={["14", "16"]}
+          >
+            Entrar
+          </Button>
         )}
       </Flex>
 
