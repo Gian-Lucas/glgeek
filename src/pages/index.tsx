@@ -7,6 +7,7 @@ import format from "date-fns/format";
 import ptBR from "date-fns/locale/pt-BR";
 import { Footer } from "../components/Footer";
 import { Link } from "../components/Link";
+import { PostCard } from "../components/PostCard";
 
 interface Post {
   id: string;
@@ -43,48 +44,7 @@ export default function Home({ postsConnection }: HomeProps) {
       {postsConnection.edges.map((edge) => {
         const post = edge.node;
         const { updatedAt } = edge;
-        return (
-          <Flex
-            transition="0.3s"
-            _hover={{
-              transform: "scale(1.05)",
-            }}
-            cursor="default"
-            key={post.id}
-            maxW="450"
-            flexDir="column"
-            bg="gray.900"
-            mx={["10", "auto"]}
-            my="10"
-          >
-            <Image src={post.banner.url} alt={post.title} />
-            <Flex
-              flexDir="column"
-              p="5"
-              borderBottomRadius="lg"
-              borderBottom="1px"
-              borderLeft="1px"
-              borderRight="1px"
-              borderColor="gray.600"
-            >
-              <Link url={`/posts/${post.slug}`}>
-                <Heading fontSize={["20", "30"]}>{post.title}</Heading>
-              </Link>
-              <Text color="gray.400" my="5" fontSize={["14", "16"]}>
-                {post.description}
-              </Text>
-
-              <Flex justify="space-between">
-                <Text color="gray.400" fontSize={["14", "16"]}>
-                  {updatedAt}
-                </Text>
-                <Link url={`/posts/${post.slug}`} fontSize={["14", "16"]}>
-                  Ler mais
-                </Link>
-              </Flex>
-            </Flex>
-          </Flex>
-        );
+        return <PostCard key={post.id} post={post} updatedAt={updatedAt} />;
       })}
 
       <Footer />
