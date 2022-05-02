@@ -37,7 +37,6 @@ interface HomeProps {
 }
 
 export default function Home({ postsConnection }: HomeProps) {
-  console.log(postsConnection);
   return (
     <>
       <Header />

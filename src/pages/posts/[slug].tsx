@@ -1,4 +1,4 @@
-import { Box, Flex, Heading, Image, Text } from "@chakra-ui/react";
+import { Box, Flex, Heading, Icon, Image, Text } from "@chakra-ui/react";
 import { RichText } from "@graphcms/rich-text-react-renderer";
 import { format } from "date-fns";
 import ptBR from "date-fns/locale/pt-BR";
@@ -7,11 +7,17 @@ import { GetStaticProps } from "next";
 import { Footer } from "../../components/Footer";
 import { Header } from "../../components/Header";
 import { graphcms } from "../../services/graphcms";
+import { RiBookmarkFill } from "react-icons/ri";
+import { RiBookmarkLine } from "react-icons/ri";
+import { useState } from "react";
+import { api } from "../../services/api";
+import { useSession } from "next-auth/client";
 
 interface Post {
   id: string;
   title: string;
   slug: string;
+  description: string;
   updatedAt: string;
   banner: {
     url: string;
@@ -32,22 +38,72 @@ interface PostProps {
 }
 
 export default function Post({ post }: PostProps) {
-  console.log(post);
+  const [session] = useSession();
+  const [isFavorite, setIsFavorite] = useState(false);
+
+  async function addToFavorites() {
+    try {
+      const res = await api.post("/favorites/create", {
+        postId: post.id,
+        userEmail: session.user.email,
+      });
+
+      setIsFavorite(true);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   return (
     <>
       <Header />
+      <Image src={post.banner.url} alt="Banner" w="100%" mx="auto" mb="4" />
+
       <Flex flexDir="column" maxW="1080" mx="auto">
-        <Image src={post.banner.url} alt="Banner" w="100%" mx="auto" mb="10" />
-        <Flex px="5" mb="20" flexDir="column">
-          <Heading fontSize={["30", "38", "45"]}>{post.title}</Heading>
-          <Flex mt="4" flexDir={["column", "row"]}>
-            <Text fontWeight="bold" mr="10" fontSize={["14", "16"]}>
+        <Flex flexDir="row" px="5" justify="space-between" align="center">
+          <Box>
+            <Text fontWeight="bold" fontSize={["14", "16"]}>
               Escrito por {post.createdBy.name}
             </Text>
             <Text color="gray.300" fontSize={["14", "16"]}>
               {post.updatedAt}
             </Text>
-          </Flex>
+          </Box>
+
+          {isFavorite ? (
+            <Icon
+              onClick={() => setIsFavorite(false)}
+              transition="0.2s"
+              color="purple.500"
+              _hover={{
+                transform: "scale(1.1)",
+              }}
+              as={RiBookmarkFill}
+              boxSize={["6", "7"]}
+              cursor="pointer"
+            />
+          ) : (
+            <Icon
+              onClick={addToFavorites}
+              transition="0.2s"
+              _hover={{
+                transform: "scale(1.1)",
+                color: "purple.500",
+              }}
+              as={RiBookmarkLine}
+              boxSize={["6", "7"]}
+              cursor="pointer"
+            />
+          )}
+        </Flex>
+
+        <Flex px="5" flexDir="column" my="5">
+          <Heading fontSize={["30", "38", "45"]} mb="2">
+            {post.title}
+          </Heading>
+          <Text color="gray.200" fontSize={["16", "18"]} textAlign="justify">
+            {post.description}
+          </Text>
         </Flex>
 
         <Box px="5">
@@ -95,9 +151,11 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   const result = await graphcms.request<{ post: Post }>(gql`
       {
         post(where: { slug: "${params.slug}" }) {  
+            id  
             createdAt
             slug
             title
+            description
             updatedAt
             content {
                 html
@@ -115,7 +173,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 
   const post = {
     ...result.post,
-    updatedAt: format(new Date(result.post.updatedAt), "PPPPp", {
+    updatedAt: format(new Date(result.post.updatedAt), "PPPp", {
       locale: ptBR,
     }),
   };
