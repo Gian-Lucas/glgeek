@@ -1,7 +1,5 @@
 import { Box, Flex, Heading, Icon, Image, Text } from "@chakra-ui/react";
 import { RichText } from "@graphcms/rich-text-react-renderer";
-import { format } from "date-fns";
-import { ptBR } from "date-fns/locale";
 import { gql } from "graphql-request";
 import { GetServerSideProps } from "next";
 import { Footer } from "../../components/Footer";
@@ -12,6 +10,7 @@ import { RiBookmarkLine } from "react-icons/ri";
 import { useState } from "react";
 import { api } from "../../services/api";
 import { getSession, useSession } from "next-auth/client";
+import { formatDate } from "../../utils/formatDate";
 
 interface Post {
   id: string;
@@ -199,11 +198,11 @@ export const getServerSideProps: GetServerSideProps = async ({
     userEmail: session.user.email,
   });
 
+  const { fullDate } = formatDate(result.post.updatedAt);
+
   const post = {
     ...result.post,
-    updatedAt: format(new Date(result.post.updatedAt), "PPPp", {
-      locale: ptBR,
-    }),
+    updatedAt: fullDate,
     isFavorite: res.data.isInFavorites,
   };
 

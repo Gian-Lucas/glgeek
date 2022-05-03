@@ -2,10 +2,9 @@ import { gql } from "graphql-request";
 import { GetStaticProps } from "next";
 import { Header } from "../components/Header";
 import { graphcms } from "../services/graphcms";
-import format from "date-fns/format";
-import { ptBR } from "date-fns/locale";
 import { Footer } from "../components/Footer";
 import { PostCard } from "../components/PostCard";
+import { formatDate } from "../utils/formatDate";
 
 interface Post {
   id: string;
@@ -82,12 +81,12 @@ export const getStaticProps: GetStaticProps = async () => {
   const result = await graphcms.request<GraphCMSResult>(QUERY);
 
   const edges = result.postsConnection.edges.map((post) => {
+    const { simpleDate } = formatDate(post.node.updatedAt);
+
     return {
       ...post,
       cursor: post.node.id,
-      updatedAt: format(new Date(post.node.updatedAt), "PP", {
-        locale: ptBR,
-      }),
+      updatedAt: simpleDate,
     };
   });
 
