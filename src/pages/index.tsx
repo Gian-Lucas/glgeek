@@ -1,12 +1,10 @@
-import { Flex, Heading, Image, Text } from "@chakra-ui/react";
 import { gql } from "graphql-request";
 import { GetStaticProps } from "next";
 import { Header } from "../components/Header";
 import { graphcms } from "../services/graphcms";
 import format from "date-fns/format";
-import ptBR from "date-fns/locale/pt-BR";
+import { ptBR } from "date-fns/locale";
 import { Footer } from "../components/Footer";
-import { Link } from "../components/Link";
 import { PostCard } from "../components/PostCard";
 
 interface Post {

@@ -1,7 +1,7 @@
 import { Box, Flex, Heading, Icon, Image, Text } from "@chakra-ui/react";
 import { RichText } from "@graphcms/rich-text-react-renderer";
 import { format } from "date-fns";
-import ptBR from "date-fns/locale/pt-BR";
+import { ptBR } from "date-fns/locale";
 import { gql } from "graphql-request";
 import { GetServerSideProps } from "next";
 import { Footer } from "../../components/Footer";
@@ -144,7 +144,9 @@ export default function Post({ post }: PostProps) {
                   {children}
                 </Text>
               ),
-              img: ({ src, title }) => <Image mx='auto' src={src} alt={title} mb="16" />,
+              img: ({ src, title }) => (
+                <Image mx="auto" src={src} alt={title} mb="16" />
+              ),
             }}
           />
         </Box>
