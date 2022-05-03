@@ -144,7 +144,7 @@ export default function Post({ post }: PostProps) {
                   {children}
                 </Text>
               ),
-              img: ({ src, title }) => <Image src={src} alt={title} mb="16" />,
+              img: ({ src, title }) => <Image mx='auto' src={src} alt={title} mb="16" />,
             }}
           />
         </Box>
