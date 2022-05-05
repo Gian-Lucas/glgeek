@@ -33,7 +33,7 @@ export default function Favorites({ posts }: FavoritesProps) {
         <Heading>Seus posts favoritos</Heading>
 
         {posts.length === 0 && (
-          <Text textAlign="justify" fontSize={["18", "20"]} mt="5">
+          <Text textAlign="justify" fontSize={["18", "20"]} mt="5" mx='10'>
             Você ainda não tem nenhum post marcado como favorito!
           </Text>
         )}
